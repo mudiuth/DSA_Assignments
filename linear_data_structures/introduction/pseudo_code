@@ -1,0 +1,18 @@
+pseudo code for swapping numbers using temporary variables 
+--------------------------------------------------------------
+ALGORITHM swap (A, B)
+
+	input: read A, B
+	output: write the swapped values of A and B {
+
+	read A, B 
+	write "before swapping: A =" A, "B =" B 
+
+	swapping 
+	temp = A
+	A = B 
+	B = temp 
+
+	write "after swapping: A =" A, "B =" B 
+
+	}

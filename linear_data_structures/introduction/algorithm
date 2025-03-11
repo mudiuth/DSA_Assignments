@@ -1,0 +1,12 @@
+an algorithm that is used to swap 2 numbers as entered by the user
+-------------------------------------------------------------------
+step 1: start
+step 2: prompt the user to enter teo numbers (A and B)
+step 3: store the numbers in variables A and B 
+step 4: use temporary (TEMP)values and swap the values 
+		TEMP = A
+		A = B
+		B = TEMP 
+step 5: print the swapped values 
+step 6: end 
+-------------------------------------------------------------------
