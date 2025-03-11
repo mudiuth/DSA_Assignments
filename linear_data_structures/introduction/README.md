@@ -1,4 +1,4 @@
-Assignment1_Qn1 
+arrays_AveMarks
 --------------------------------------------------------------------------
 write a C program that calculates the average of marks got by a student in three subjects ir Phy, Chem and MTC. Assume for eacj subject four different tests were conducted ie assignments, course work, mid term, and end of term exams 
 
@@ -12,7 +12,7 @@ the average of physics = 66.50
 
 this is got by suming up the marks obtained from each of the tests and then dividing it through by the numbr of tests done just like it is shown in the code 
 
-Assignment1_Qn2
+animal_merge
 ---------------------------------------------------------------------------
 write a C program that accepts a group N domestic animals and a group of X wild animals. Your program should print N+X animals after entering each group 
 
