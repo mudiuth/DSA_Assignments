@@ -20,7 +20,8 @@ int main(){
 	printf("please enter the index of the number to be printed: ");
 	scanf("%d", &index);
 
-	//for (int i=0; i<=_size; i++){
+	//for (int i=0; i<=_size; i++){ 
+	//this loop is comented out since it is actually not required since the process of locating an element is a on program step
 	if (index>=0 && index<_size){
 	printf("\nthe number at %d is %d",index, nums[index]);
 	}else{
