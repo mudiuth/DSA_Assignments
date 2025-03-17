@@ -14,15 +14,21 @@ DepositedAmount
 */
 #include <stdio.h>
 
-MainMenu
+void MainMenu(){
 
-
+	const char *options[]= {"Deposit Money", "Withdraw Money", "Check Balance"};
+	int _size = sizeof(options)/sizeof(options[0]);
+	for(int i=0; i<_size; i++){
+		printf("\n%d. %s", i + 1, options[i]);
+	}
+}
 
 int main(){
-char
 
-printf("welcome to the MINER SAVINGS SACCO \n big from nothing");
-printf("\nPlease select an option;")
+printf("welcome to THE MINER SAVINGS SACCO \nBig from nothing");
+printf("\nPlease select your option;");
+
+MainMenu();
 
 
 
