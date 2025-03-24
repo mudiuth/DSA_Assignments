@@ -1,9 +1,9 @@
 #include <stdio.h> 
 #include <string.h>
 int main() {
-//write a C program that accepts a group N domestic animals and a group 
-//of X wild animals. Your program should print N+X animals after entering 
-//each group 
+/*write a C program that accepts a group N domestic animals and a group 
+of X wild animals. Your program should print N+X animals after entering 
+each group*/ 
 
 int N,X;
 
