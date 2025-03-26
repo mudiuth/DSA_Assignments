@@ -15,20 +15,20 @@ void check_Push(struct stack *s, int val){  //a function that is made to check i
     printf("stack is full!\nCant push %d",val);
     return;
   }
-  s->top=s->top+1;
+  s->top++;
   s->arr[s->top]=val;
   printf("pushed the value %d to the stack\n",val);
 }
 
-void check_pop(struct stack *s, int val){
+void check_pop(struct stack *s){
 	if (s->top==-1){
 		printf("underflow!!\nThe stack is empty\nCannot pop anything!");
 		return;
 	}
 
-	s->arr[s->top]=val;
-	s->top-1;
-	printf("\nPopped %d from the stack!",val);
+	int popped_value = s->arr[s->top];	//this sets the topmost value of the stack 
+	s->top--;	//decrease the top most index
+	printf("\nPopped %d from the stack!",popped_value);
 }
 
 void display(struct stack *s){
@@ -47,16 +47,16 @@ void display(struct stack *s){
 int main(){
 	struct stack s;
 	init_stack(&s);
-
+	//pushing on to the stack
 	check_Push(&s,20);
 	check_Push(&s,30);
 	check_Push(&s,40);
 	check_Push(&s,50);
 	check_Push(&s,60);
 	check_Push(&s,90);
-
-	check_pop(&s, 20);
-	check_pop(&s, 30);
+	//popping from the stack
+	check_pop(&s);
+	check_pop(&s);
 
 
 
