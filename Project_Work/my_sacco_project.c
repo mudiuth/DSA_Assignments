@@ -23,6 +23,35 @@ void MainMenu(){
 	}
 }
 
+/*#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+*/
+//Storing the account details
+struct Account{
+    char name[50];
+    int acc_number;
+    float blnc;
+};
+
+//funtion for the time
+void printtimestamp(){
+    time_t rawtime;
+    struct tm *timeinfo;
+    char Time[20];
+
+    time(&rawtime);//current time
+    timeinfo = localtime(&rawtime);
+    strftime(Time,sizeof(Time),"%d-%m-%Y %H:%M:%S",timeinfo);//time format
+}
+
+//to deposit money
+void deposit_money(struct account *acc)
+
+
+
+
 int main(){
 
 printf("welcome to THE MINER SAVINGS SACCO \nBig from nothing");
