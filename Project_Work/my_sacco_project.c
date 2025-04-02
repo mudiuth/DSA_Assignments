@@ -22,6 +22,14 @@ void MainMenu(){
 		printf("\n%d. %s", i + 1, options[i]);
 	}
 }
+struct acct{
+	int acct_no;
+	char *acct_name[];
+	int acct_pin;
+	float acct_bal;
+}
+
+void register_acct(struct acct *A)
 
 int main(){
 
