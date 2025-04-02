@@ -18,7 +18,7 @@ void check_Push(struct stack *s, const char *friends){  //a function that is mad
   }
   s->top++;
   strcpy (s->arr[s->top],friends);
-  printf("pushed the value %s to the stack\n",friends);
+  printf("pushed  %s to the stack\n",friends);
 }
 
 void check_pop(struct stack *s){
