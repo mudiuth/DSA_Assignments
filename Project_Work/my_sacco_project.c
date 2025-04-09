@@ -13,6 +13,11 @@ DepositedAmount
 
 */
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+
 
 void MainMenu(){
 
@@ -29,13 +34,8 @@ struct acct{
 	float acct_bal;
 }
 
-void register_acct(struct acct *A)
 
-/*#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <string.h>
-*/
+
 //Storing the account details
 struct Account{
     char name[50];
