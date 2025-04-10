@@ -29,6 +29,7 @@ typedef struct Farmer {
     int id;
     char name[50];
     float acctBal;
+    char pin[5];
     int transactionCount;
     Transaction transactions[MAX_TRANSACTIONS];
 } Farmer;
@@ -42,6 +43,39 @@ typedef struct {
     stackNode *top;
     int size;
 } stack;
+
+#include <termios.h>
+#include <unistd.h>
+void getHiddenPin(char *pin, int length){
+    struct termios oldt, newt;
+    int i=0;
+    char ch;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+
+    newt.c_lflag &= ~(ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    while (i< length){
+        ch = getchar();
+        if(ch >= '0' && ch<= '9'){
+            pin[i++] = ch;
+            printf("*");
+        }else if((ch==127 || ch == 8) && i > 0){
+            //if(i > 0){
+                i--;
+                printf("\b \b"); 
+                //return;
+           // }
+        }
+    }
+    pin[i] = '\0';
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    printf("\n");
+}
+
 
 #define MAX_FARMERS 100
 Farmer *farmer[MAX_FARMERS] = {NULL};
@@ -70,6 +104,11 @@ Farmer *searchFarmer(int id) {
     unsigned int index = hash(id);
     Farmer *temp = farmer[index];
     return temp; // Since no linked list, return the farmer at the index or NULL
+
+    if(temp != NULL && temp->id == id){
+        return temp;
+    }
+    return NULL;
 }
 
 void addTransaction(Farmer *farmer, char type, float amount) {
@@ -195,8 +234,12 @@ void mainMenu() {
             char name[50];
             printf("Enter your name: ");
             scanf(" %[^\n]", name);
-
+            printf("Select a 4 digit pin for your account: ");
             Farmer *f = newFarmer(name);
+            getHiddenPin(f->pin, 4);
+            printf("pin set successfully");
+
+            //f = newFarmer(name);
             printf("Account created successfully!\n");
             printf("Your Farmer ID is: %05d\n", f->id);
             printf("Name: %s\n", f->name);
@@ -224,8 +267,19 @@ void mainMenu() {
                 continue; // Changed from exit(0) to continue
             } else {
                 printf("Welcome back, %s!\n", f->name);
+                printf("Please enter your Pin:\n");
+                
+
+                char enteredPin[5];
+                printf("Enter Your PIN: ");
+                getHiddenPin(enteredPin, 4);
+
+                if (strcmp(enteredPin, f->pin) !=0){
+                    printf("Incorrect PIN. Access denied \n");
+                    continue;
+                }
                 printf("What wud u like to do today?\n");
-                printf("1. Deposit\n2. Withdraw\n3. View Last Transactions\n4. Logout\n");
+                printf("1. Deposit\n2. Withdraw\n3. View Last Transactions\n4. Check balance\n5. Logout\n");
                 scanf("%d", &choice);
 
                 if (choice == 1) {
@@ -254,6 +308,9 @@ void mainMenu() {
                     printf("How many transactions to view? ");
                     scanf("%d", &n);
                     getTrans(f, n);
+                }else if (choice == 4){
+                    printf("Your acct balance is %.2f",f->acctBal);
+                    continue;
                 }
             }
         } else if (choice == 3) {
