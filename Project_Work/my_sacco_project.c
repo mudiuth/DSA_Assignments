@@ -34,10 +34,10 @@ typedef struct Farmer {
     Transaction transactions[MAX_TRANSACTIONS];
 } Farmer;
 
-typedef struct stackNode {
+/*typedef struct stackNode {
     Transaction *transaction;
     struct stackNode *next;
-} stackNode;
+} stackNode;*/
 
 typedef struct {
     stackNode *top;
