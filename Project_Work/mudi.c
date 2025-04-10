@@ -40,15 +40,20 @@ unsigned int hash(int id){
 }
 
 //creating a new farmer acct 
-Farmer *newFarmer(int id, const *char name, float acctBal){
-	unsigned int index = hash(id);
+int farmercount = 0;
+Farmer *newFarmer(const char *name){
 	Farmer *newFarmer= (Farmer *)malloc(sizeof(Farmer));
+	farmercount++;
 
-	newFarmer->id = id;
-	newFarmer->acctBal = acctBal;
+	newFarmer->id = farmercount;
+	newFarmer->acctBal = 0.00;
 	strcpy(newFarmer->name,name);
 	newFarmer->transaction = NULL;
+	newFarmer->next = NULL;
+
+	unsigned int index = hash(newFarmer->id);
 	farmer[index]=newFarmer;
+
 	return newFarmer;
 }
 
@@ -70,7 +75,7 @@ void addTransaction(Farmer *farmer, char type, float amount){
 
 	Transaction *newTrans = (Transaction *)malloc(sizeof(Transaction));
 	newTrans->amount = amount;
-	strcpy(newTrans->type, type);
+	newTrans->type = type;
 	newTrans->timestamp =time(NULL);
 	newTrans->next=NULL; //initialising 
 
@@ -91,7 +96,7 @@ void deposit (Farmer *farmer, float amount){
 		printf("Invalid amount to deposit\nMin is 500");
 		return;
 	}
-	addTransaction(farmer, D, amount);
+	addTransaction(farmer, 'D', amount);
 	printf("Deposited %.2f. New balance is %.2f",amount,farmer->acctBal);
 }
 
@@ -101,15 +106,15 @@ void withdraw (Farmer *farmer, float amount){
 		return;
 	}
 	if(amount > farmer->acctBal){
-		pritf("insufficient funds! please check you account and try again");
+		printf("insufficient funds! please check you account and try again");
 		return;
 	}
-	addTransaction(farmer, W, amount)
-	printf("withdrew %.2f, new balance is %.2f",amount. farmer->acctBal);
+	addTransaction(farmer, 'W', amount);
+	printf("withdrew %.2f, new balance is %.2f",amount, farmer->acctBal);
 }
 
 
-void pushT(stack *s, Transaction *t){
+void push(stack *s, Transaction *t){
 	stackNode *newNode=(stackNode *)malloc(sizeof(stackNode));
 	newNode->transaction = t;
 	newNode->next = s->top;
@@ -135,7 +140,7 @@ void getTrans(Farmer *f, int n){
 		return;
 	stack s ={NULL,0};
 
-	Transaction *current = farmer->transaction;
+	Transaction *current = f->transaction;
 
 	while (current != NULL){
 		push(&s, current);
@@ -146,33 +151,100 @@ void getTrans(Farmer *f, int n){
 
 	//present n transactions from stack
 
-	for (int i=0; i<n && s->size>0; i++){
+	for (int i=0; i<n && s.size>0; i++){
 		Transaction *t = pop(&s);
-		char *type =(trans->type == 'D') ? "Deposit" : "Withdraw";
-		printf("%s\t.2f\t%s",type, t->amount, ctime(&t->timestamp));
+		char *type =(t->type == 'D') ? "Deposit" : "Withdraw";
+		printf("%s\t%.2f\t%s",type, t->amount, ctime(&t->timestamp));
 	}
 	//freeing any remaining stack nodes
-	while (stack.size >0){
+	while (s.size >0){
 		pop(&s);
 	}
 }
 
 
-Farmer *createFarmer(int id){
-	Farmer *farmer = (Farmer *)malloc(sizeof(Farmer));
-	addFarmer ->id = id;
-	addFarmer -> acctBal = 0.00;
-	addFarmer -> transaction = NULL;
+void mainMenu() {
+    int choice;
+    while (1) {
+        printf("\nWelcome to the Farmer Account System\n");
+        printf("1. Create New Account\n");
+        printf("2. Access Existing Account\n");
+        printf("3. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
 
-	newFarmer(addFarmer);
-	return addFarmer;
+        if (choice == 1) {
+            char name[50];
+            printf("Enter your name: ");
+             scanf(" %[^\n]", name); // Accepts full name with spaces
+
+            Farmer *f = newFarmer(name); // Create new farmer
+            printf("Account created successfully!\n");
+            printf("Your Farmer ID is: %05d\n", f->id);
+            printf("Name: %s\n", f->name);
+
+            float depositAmt;
+            printf("Please deposit at least 1000 UGX to activate your account: ");
+            scanf("%f", &depositAmt);
+
+            while (depositAmt < 1000) {
+                printf("Deposit must be at least 1000 UGX: ");
+                scanf("%f", &depositAmt);
+            }
+
+            addTransaction(f, 'D', depositAmt);
+            printf("Account activated. Your current balance is: %.2f UGX\n", f->acctBal);
+
+        } else if (choice == 2) {
+            int id;
+            printf("Enter your Farmer ID: ");
+            scanf("%d", &id);
+            Farmer *f = searchFarmer(id);
+            if (f == NULL) {
+                printf("No account found with that ID.\n");
+                exit(0);
+            } else {
+                printf("Welcome back, %s!\n", f->name);
+                printf("What wud u like to do today?\n");
+                printf("1. Deposit\n2. Withdraw\n3. View Last Transactions\n4. Logout\n");
+                scanf("%d",&choice);
+
+                if (choice == 1){
+                	float depositAmt;
+                	printf("please enter the amount to deposit:\n");
+                	scanf("%f", &depositAmt);
+
+                	while (depositAmt < 1000){
+                		printf("deposit should be atleast 1000 UGX:");
+                		scanf("%f", &depositAmt);
+                	}
+
+                	addTransaction(f, 'D', depositAmt);
+                	printf("Transaction successfull. New balance is %.2f UGX\n",f->acctBal);
+                }else if (choice == 2){
+                	float withdrawAmt;
+                	printf("please enter amount to withdraw!\n");
+                	scanf("%f", &withdrawAmt);
+                	while (withdrawAmt < 1000){
+                		printf("Please enter a reasonable amount greater than 1000 UGX!");
+                		scanf("%f", &withdrawAmt);
+                	}
+                	addTransaction(f, 'W', withdrawAmt);
+                	printf("Transaction successfull! your acct balance is %.2f UGX\n",f->acctBal);
+                }
+
+                // more changes coming in here... we need to call these functions 
+            }
+        } else if (choice == 3) {
+            printf("Goodbye!\n");
+            break;
+        } else {
+            printf("Invalid choice. Try again.\n");
+        }
+    }
 }
 
-void MainMenu(){
-
-	const char *options[]= {"Deposit Money", "Withdraw Money", "Check Balance"};
-	int _size = sizeof(options)/sizeof(options[0]);
-	for(int i=0; i<_size; i++){
-		printf("\n%d. %s", i + 1, options[i]);
-	}
-
+int main(){
+	mainMenu();
+	return 0;
+}
